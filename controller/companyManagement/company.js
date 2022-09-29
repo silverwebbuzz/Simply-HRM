@@ -4,6 +4,7 @@ const response = require("../../helper/middlewere");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { userType } = require("../../helper/enum/userType");
+const { login } = require("../auth/authentiction");
 
 //Company Registation
 module.exports.company_registation = async (req, res) => {
@@ -41,13 +42,11 @@ module.exports.company_login = async (req, res) => {
   try {
     const email_id = req.body.email_id;
     const user = await Company.findOne({ email_id: email_id });
-    console.log(user);
     if (user) {
       const validPassword = await bcrypt.compare(
         req.body.password,
         user.password
       );
-      console.log(validPassword);
       const token = jwt.sign({ user }, process.env.SECRET_KEY);
       if (!validPassword) {
         res.send(response.common("Login Failed..", false, undefined, 300));
@@ -93,7 +92,7 @@ module.exports.update_company_details = async (req, res) => {
             contact_person: req.body.contact_person,
             time_zone: req.body.time_zone,
             date_format: req.body.date_format,
-            company_id: req.body.company_id,
+            company_number: req.body.company_number,
             company_tax_id: req.body.company_tax_id,
           },
           {
@@ -118,4 +117,3 @@ module.exports.update_company_details = async (req, res) => {
     res.send(response.common(err, false, undefined, 500));
   }
 };
-//sdfsdf

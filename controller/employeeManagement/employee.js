@@ -6,13 +6,12 @@ const company = require("../../model/company");
 
 //Employee registation
 module.exports.employee_registation = async (req, res) => {
-  console.log("hi");
   try {
-    const data = await Employee.findOne({
+    const Employe_data = await Employee.findOne({
       email_address: req.body.email_address,
     });
-    console.log(data);
-    if (data) {
+
+    if (Employe_data) {
       res.send(response.common("User alrady exist", false, undefined, 300));
     } else {
       const user = new Employee({
@@ -37,7 +36,7 @@ module.exports.employee_registation = async (req, res) => {
         IFSC_code: req.body.IFSC_code,
         upload_Document: req.body.upload_Document,
         employee_image: req.body.employee_image,
-        user_id: req.body.user_id,
+        company_id: req.body.company_id,
         user_type: userType.EMPLOYEES,
       });
       const newUser = user.save();
@@ -126,9 +125,9 @@ module.exports.employee_delete = async (req, res) => {
 //Employee Get By ID
 module.exports.get_employee = async (req, res) => {
   try {
-    const user_id = req.body.user_id;
-    const Employe_get = await Employee.findById({ user_id });
-    if (Employe_get) {
+    const id = req.params.id;
+    const Employe_get = await Employee.find({ company_id: id });
+    if (Employe_get.length > 0) {
       res.send(response.common("Get All Employee", true, Employe_get, 200));
     } else {
       res.send(response.common("Employee Not Found", false, 300));

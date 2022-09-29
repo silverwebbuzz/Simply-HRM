@@ -36,9 +36,13 @@ module.exports.registation = async (req, res) => {
 //user login
 module.exports.login = async (req, res) => {
   try {
+    if (!req.body.email_id) {
+      res.json("provide");
+    }
     const email_id = req.body.email_id;
     const user = await Users.findOne({ email_id: email_id });
-    console.log(user);
+    console.log("hii");
+
     if (user) {
       const validPassword = await bcrypt.compare(
         req.body.password,

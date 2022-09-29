@@ -44,7 +44,7 @@ const CompanySchema = new mongoose.Schema({
   date_format: {
     type: "string",
   },
-  company_id: {
+  company_number: {
     type: "string",
   },
   company_tax_id: {

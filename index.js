@@ -6,13 +6,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 // const multer = require("multer");
-const routes = require("../Simply/routes/app");
+const routes = require("./routes/app");
 const app = express();
-
+const Employee = require("./model/employee");
+const response = require("./helper/middlewere");
 const server = http.createServer(app);
-
+const port = process.env.PORT || 8000;
 app.use(bodyParser.json());
-
+app.use(express.urlencoded({ extended: false }));
 // app.use(
 //   bodyParser.urlencoded({
 //     limit: "500mb",
@@ -40,7 +41,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", routes);
 
-server.listen(process.env.PORT, (err) => {
+server.listen(port, (err) => {
   if (err) throw err;
-  console.log("Server Up And Working....🍺🍺🍺" + process.env.PORT);
+  console.log("Server Up And Working....🍺🍺🍺" + port);
 });

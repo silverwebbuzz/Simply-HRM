@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcriptjs = require("bcryptjs");
+const bcryptjs = require("bcryptjs");
 const Employeeschema = new mongoose.Schema({
   first_Name: {
     type: "string",
@@ -68,7 +68,7 @@ const Employeeschema = new mongoose.Schema({
   user_type: {
     type: "string",
   },
-  user_id: {
+  company_id: {
     type: "string",
   },
   created_at: {
