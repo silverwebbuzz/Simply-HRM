@@ -117,3 +117,34 @@ module.exports.update_company_details = async (req, res) => {
     res.send(response.common(err, false, undefined, 500));
   }
 };
+
+//All Company Get
+
+module.exports.getAllCompany = async (req, res) => {
+  try {
+    const Company_get = await Company.find();
+    if (Company_get) {
+      res.send(response.common("Get All Company", true, Company_get, 200));
+    } else {
+      res.send(response.common("Company Not Found", false, 300));
+    }
+  } catch (err) {
+    res.send(response.common(err, false, undefined, 500));
+  }
+};
+
+//Get ID BY Company
+
+module.exports.companyById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const company_get = await Company.findById(id);
+    if (company_get) {
+      res.send(response.common("Get company", true, company_get, 200));
+    } else {
+      res.send(response.common("company Not Found", false, 300));
+    }
+  } catch (err) {
+    res.send(response.common(err, false, undefined, 500));
+  }
+};
