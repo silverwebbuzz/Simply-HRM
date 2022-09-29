@@ -11,7 +11,6 @@ const app = express();
 const Employee = require("./model/employee");
 const response = require("./helper/middlewere");
 const server = http.createServer(app);
-const port = process.env.PORT || 8000;
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 // app.use(
@@ -41,7 +40,7 @@ app.get("/", (req, res) => {
 
 app.use("/api", routes);
 
-server.listen(port, (err) => {
+server.listen(process.env.PORT, (err) => {
   if (err) throw err;
-  console.log("Server Up And Working....🍺🍺🍺" + port);
+  console.log("Server Up And Working....🍺🍺🍺" + process.env.PORT);
 });
