@@ -11,7 +11,9 @@ module.exports.registation = async (req, res) => {
     const data = await Users.findOne({ email_id: req.body.email_id });
     console.log();
     if (data) {
-      res.send(response.common("User alrady exist", false, undefined, 300));
+      res
+        .status(422)
+        .send(response.common("User alrady exist", false, undefined, 300));
     } else {
       const user = new Users({
         first_name: req.body.first_name,
@@ -25,11 +27,13 @@ module.exports.registation = async (req, res) => {
       if (newUser) {
         res.send(response.common("Registation Successfully ", true, user, 200));
       } else {
-        res.send(response.common("Registation Failed", true, undefined, 400));
+        res
+          .status(422)
+          .send(response.common("Registation Failed", true, undefined, 400));
       }
     }
   } catch (err) {
-    res.send(response.common(err, false, undefined, 600));
+    res.status(422).send(response.common(err, false, undefined, 600));
   }
 };
 
@@ -41,8 +45,6 @@ module.exports.login = async (req, res) => {
     }
     const email_id = req.body.email_id;
     const user = await Users.findOne({ email_id: email_id });
-    console.log("hii");
-
     if (user) {
       const validPassword = await bcrypt.compare(
         req.body.password,
@@ -51,15 +53,19 @@ module.exports.login = async (req, res) => {
       console.log(validPassword);
       const token = jwt.sign({ user }, process.env.SECRET_KEY);
       if (!validPassword) {
-        res.send(response.common("Login Failed..", false, undefined, 300));
+        res
+          .status(422)
+          .send(response.common("Login Failed..", false, undefined, 300));
       } else {
         const data1 = { user, token };
         res.send(response.common("Login Sucessfully", true, data1, 200));
       }
     } else {
-      res.send(response.common("email does not exist", false, undefined, 400));
+      res
+        .status(422)
+        .send(response.common("email does not exist", false, undefined, 400));
     }
   } catch (err) {
-    res.send(response.common(err, false, undefined, 500));
+    res.status(422).send(response.common(err, false, undefined, 500));
   }
 };

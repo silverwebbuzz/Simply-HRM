@@ -12,7 +12,9 @@ module.exports.employee_registation = async (req, res) => {
     });
 
     if (Employe_data) {
-      res.send(response.common("User alrady exist", false, undefined, 300));
+      res
+        .status(422)
+        .send(response.common("User alrady exist", false, undefined, 300));
     } else {
       const user = new Employee({
         first_Name: req.body.first_Name,
@@ -43,11 +45,13 @@ module.exports.employee_registation = async (req, res) => {
       if (newUser) {
         res.send(response.common("Registation Successfully ", true, user, 200));
       } else {
-        res.send(response.common("Registation Failed", true, undefined, 400));
+        res
+          .status(422)
+          .send(response.common("Registation Failed", true, undefined, 400));
       }
     }
   } catch (err) {
-    res.send(response.common(err, false, 600));
+    res.status(422).send(response.common(err, false, 600));
   }
 };
 
@@ -92,13 +96,17 @@ module.exports.update_employee_details = async (req, res) => {
           response.common("user updated successfully", true, updateDetails, 200)
         );
       } else {
-        res.send(response.common("user Not updated", false, undefined, 300));
+        res
+          .status(422)
+          .send(response.common("user Not updated", false, undefined, 300));
       }
     } else {
-      res.send(response.common("User Not Found", false, undefined, 600));
+      res
+        .status(422)
+        .send(response.common("User Not Found", false, undefined, 600));
     }
   } catch (err) {
-    res.send(response.common(err, false, undefined, 500));
+    res.status(422).send(response.common(err, false, undefined, 500));
   }
 };
 
@@ -115,10 +123,10 @@ module.exports.employee_delete = async (req, res) => {
         response.common("Employee Deleted Successfully", true, delet, 200)
       );
     } else {
-      res.send(response.common("Employee Not Found", false, 300));
+      res.status(422).send(response.common("Employee Not Found", false, 300));
     }
   } catch (err) {
-    res.send(response.common(err, false, 400));
+    res.status(422).send(response.common(err, false, 400));
   }
 };
 
@@ -130,7 +138,7 @@ module.exports.get_employee = async (req, res) => {
     if (Employe_get.length > 0) {
       res.send(response.common("Get All Employee", true, Employe_get, 200));
     } else {
-      res.send(response.common("Employee Not Found", false, 300));
+      res.status(422).send(response.common("Employee Not Found", false, 300));
     }
   } catch (err) {
     res.status(400).json({ message: err.message });

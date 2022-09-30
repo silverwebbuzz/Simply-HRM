@@ -18,7 +18,9 @@ module.exports.company_registation = async (req, res) => {
       company_name: company_name,
     });
     if (Email || Company_Name) {
-      res.send(response.common("User alrady exist", false, undefined, 300));
+      res
+        .status(422)
+        .send(response.common("User alrady exist", false, undefined, 300));
     } else {
       const user = new Company({
         company_name: req.body.company_name,
@@ -29,11 +31,13 @@ module.exports.company_registation = async (req, res) => {
       if (newUser) {
         res.send(response.common("Registation Successfully ", true, user, 200));
       } else {
-        res.send(response.common("Registation Failed", true, undefined, 400));
+        res
+          .status(422)
+          .send(response.common("Registation Failed", true, undefined, 400));
       }
     }
   } catch (err) {
-    res.send(response.common(err, false, undefined, 600));
+    res.status(422).send(response.common(err, false, undefined, 600));
   }
 };
 
@@ -49,18 +53,27 @@ module.exports.company_login = async (req, res) => {
       );
       const token = jwt.sign({ user }, process.env.SECRET_KEY);
       if (!validPassword) {
-        res.send(response.common("Login Failed..", false, undefined, 300));
+        res
+          .status(422)
+          .send(response.common("Login Failed..", false, undefined, 300));
       } else {
         const data = { user, token };
         res.send(response.common("Login Sucessfully", true, data, 200));
       }
     } else {
-      res.send(
-        response.common("Email And Password Not Currect", false, undefined, 400)
-      );
+      res
+        .status(422)
+        .send(
+          response.common(
+            "Email And Password Not Currect",
+            false,
+            undefined,
+            400
+          )
+        );
     }
   } catch (err) {
-    res.send(response.common(err, false, undefined, 500));
+    res.status(422).send(response.common(err, false, undefined, 500));
   }
 };
 
@@ -71,11 +84,11 @@ module.exports.update_company_details = async (req, res) => {
     const company_name = req.body.company_name;
     const Company_Id = await Company.findById(id);
     if (!Company_Id) {
-      res.send(response.common("User Not Found"));
+      res.status(422).send(response.common("User Not Found"));
     } else {
       const update = await Company.find({ company_name });
       if (update.length > 0) {
-        res.send(response.common("Company Name Alredy Exist"));
+        res.status(422).send(response.common("Company Name Alredy Exist"));
       } else {
         const updateDetails = await Company.findByIdAndUpdate(
           id,
@@ -109,12 +122,14 @@ module.exports.update_company_details = async (req, res) => {
             )
           );
         } else {
-          res.send(response.common("user Not updated", false, undefined, 300));
+          res
+            .status(422)
+            .send(response.common("user Not updated", false, undefined, 300));
         }
       }
     }
   } catch (err) {
-    res.send(response.common(err, false, undefined, 500));
+    res.status(422).send(response.common(err, false, undefined, 500));
   }
 };
 
@@ -126,10 +141,10 @@ module.exports.getAllCompany = async (req, res) => {
     if (Company_get) {
       res.send(response.common("Get All Company", true, Company_get, 200));
     } else {
-      res.send(response.common("Company Not Found", false, 300));
+      res.status(422).send(response.common("Company Not Found", false, 300));
     }
   } catch (err) {
-    res.send(response.common(err, false, undefined, 500));
+    res.status(422).send(response.common(err, false, undefined, 500));
   }
 };
 
@@ -142,9 +157,9 @@ module.exports.companyById = async (req, res) => {
     if (company_get) {
       res.send(response.common("Get company", true, company_get, 200));
     } else {
-      res.send(response.common("company Not Found", false, 300));
+      res.status(422).send(response.common("company Not Found", false, 300));
     }
   } catch (err) {
-    res.send(response.common(err, false, undefined, 500));
+    res.status(422).send(response.common(err, false, undefined, 500));
   }
 };
