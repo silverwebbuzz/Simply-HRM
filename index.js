@@ -10,6 +10,7 @@ const routes = require("./routes/app");
 const app = express();
 const Employee = require("./model/employee");
 const response = require("./helper/middlewere");
+const cors = require("cors");
 const server = http.createServer(app);
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,7 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 //     parameterLimit: 100000000,
 //   })
 // );
-
+app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
