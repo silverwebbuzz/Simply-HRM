@@ -13,7 +13,10 @@ const Employeeschema = new mongoose.Schema({
   date_of_birth: {
     type: "string",
   },
-  email_address: {
+  email_id: {
+    type: "string",
+  },
+  password: {
     type: "string",
   },
   mobile_number: {
@@ -76,5 +79,17 @@ const Employeeschema = new mongoose.Schema({
     default: Date.now,
   },
 });
+Employeeschema.pre("save", async function (next) {
+  try {
+    if (!this.isModified("password")) {
+      return next();
+    }
+    const hased = await bcryptjs.hash(this.password, 10);
+    this.password = hased;
 
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+});
 module.exports = mongoose.model("employee", Employeeschema);

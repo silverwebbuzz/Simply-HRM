@@ -23,14 +23,17 @@ module.exports.registation = async (req, res) => {
         password: req.body.password,
         user_type: userType.ADMIN,
       });
-      const newUser = user.save();
-      if (newUser) {
-        res.send(response.common("Registation Successfully ", true, user, 200));
-      } else {
-        res
-          .status(422)
-          .send(response.common("Registation Failed", true, undefined, 400));
-      }
+      user.save().then(async (userData) => {
+        if (userData) {
+          res.send(
+            response.common("Registation Successfully ", true, userData, 200)
+          );
+        } else {
+          res
+            .status(422)
+            .send(response.common("Registation Failed", true, undefined, 400));
+        }
+      });
     }
   } catch (err) {
     res.status(422).send(response.common(err, false, undefined, 600));
