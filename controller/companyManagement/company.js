@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { userType } = require("../../helper/enum/userType");
 const { login } = require("../auth/authentiction");
-
+const Holiday = require("../../model/holiday");
 //Company Registation
 module.exports.company_registation = async (req, res) => {
   try {
@@ -27,14 +27,17 @@ module.exports.company_registation = async (req, res) => {
         email_id: req.body.email_id,
         password: req.body.password,
       });
-      const newUser = user.save();
-      if (newUser) {
-        res.send(response.common("Registation Successfully ", true, user, 200));
-      } else {
-        res
-          .status(422)
-          .send(response.common("Registation Failed", true, undefined, 400));
-      }
+      user.save().then(async (companyData) => {
+        if (companyData) {
+          res.send(
+            response.common("Registation Successfully ", true, companyData, 200)
+          );
+        } else {
+          res
+            .status(422)
+            .send(response.common("Registation Failed", true, undefined, 400));
+        }
+      });
     }
   } catch (err) {
     res.status(422).send(response.common(err, false, undefined, 600));
@@ -161,5 +164,28 @@ module.exports.companyById = async (req, res) => {
     }
   } catch (err) {
     res.status(422).send(response.common(err, false, undefined, 500));
+  }
+};
+
+//Add Holiday
+
+module.exports.add_holiday = async (req, res) => {
+  try {
+    const holiday = new Holiday({
+      holiday_name: req.body.holiday_name,
+      date: req.body.date,
+      day: req.body.day,
+      company_id: req.body.company_id,
+    });
+    const newholiday = holiday.save();
+    if (newholiday) {
+      res.send(response.common("Holiday Add Success ", true, holiday, 200));
+    } else {
+      res
+        .status(422)
+        .send(response.common("Not Add Holiday", false, undefined, 400));
+    }
+  } catch (err) {
+    res.status(422).send(response.common(err, false, undefined, 600));
   }
 };

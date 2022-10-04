@@ -2,6 +2,7 @@
 const http = require("http");
 const mongoose = require("mongoose");
 const express = require("express");
+const multer = require("multer");
 // const path = require("path");
 const bodyParser = require("body-parser");
 require("dotenv").config();
