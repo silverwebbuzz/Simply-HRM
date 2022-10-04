@@ -171,12 +171,15 @@ module.exports.companyById = async (req, res) => {
 
 module.exports.add_holiday = async (req, res) => {
   try {
-    const holiday = new Holiday({
-      holiday_name: req.body.holiday_name,
-      date: req.body.date,
-      day: req.body.day,
-      company_id: req.body.company_id,
-    });
+    const holiday = new Holiday(
+      {
+        holiday_name: req.body.holiday_name,
+        date: req.body.date,
+        day: req.body.day,
+        company_id: req.body.company_id,
+      },
+      { new: true }
+    );
     const newholiday = holiday.save();
     if (newholiday) {
       res.send(response.common("Holiday Add Success ", true, holiday, 200));
