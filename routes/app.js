@@ -50,4 +50,14 @@ router.delete(
 );
 router.get("/get_employee/:id", upload.none(), employeeManagement.get_employee);
 router.get("/get_holiday/:id", upload.none(), employeeManagement.get_holiday);
+router.post(
+  "/holiday_update/:id",
+  upload.none(),
+  employeeManagement.holiday_update
+);
+router.delete(
+  "/holiday_delete/:id",
+  upload.none(),
+  employeeManagement.holiday_delete
+);
 module.exports = router;
