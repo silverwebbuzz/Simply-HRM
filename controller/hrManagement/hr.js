@@ -6,8 +6,9 @@ const jwt = require("jsonwebtoken");
 const { userType } = require("../../helper/enum/userType");
 const company = require("../../model/company");
 const holiday = require("../../model/holiday");
-//Employee registration
-module.exports.employee_registration = async (req, res) => {
+const employee = require("../../model/employee");
+//HR Registration
+module.exports.hr_registration = async (req, res) => {
   try {
     const Employe_data = await Employee.findOne({
       email_id: req.body.email_id,
@@ -16,7 +17,7 @@ module.exports.employee_registration = async (req, res) => {
     if (Employe_data) {
       res
         .status(422)
-        .send(response.common("Employee already exist", false, undefined, 300));
+        .send(response.common("HR already exist", false, undefined, 300));
     } else {
       const user = new Employee({
         first_Name: req.body.first_Name,
@@ -34,8 +35,8 @@ module.exports.employee_registration = async (req, res) => {
         designation: req.body.designation,
         date_of_joining: req.body.date_of_joining,
         company_id: req.body.company_id,
-        employee_id: req.body.employee_id,
-        user_type: userType.EMPLOYEES,
+        hr_id: req.body.hr_id,
+        user_type: userType.HR,
       });
       user.save().then(async (employeeData) => {
         if (employeeData) {
@@ -59,8 +60,9 @@ module.exports.employee_registration = async (req, res) => {
   }
 };
 
-//Employee Login
-module.exports.employee_login = async (req, res) => {
+//HR Login
+
+module.exports.hr_login = async (req, res) => {
   try {
     const email_id = req.body.email_id;
     const user = await Employee.findOne({ email_id: email_id });
@@ -88,9 +90,8 @@ module.exports.employee_login = async (req, res) => {
   }
 };
 
-//Employee update
-
-module.exports.update_employee_details = async (req, res) => {
+//HR Update
+module.exports.update_hr_details = async (req, res) => {
   try {
     const id = req.params.id;
     const email = await Employee.findById(id);
@@ -126,122 +127,39 @@ module.exports.update_employee_details = async (req, res) => {
       );
       if (updateDetails) {
         res.send(
-          response.common(
-            "Employee updated successfully",
-            true,
-            updateDetails,
-            200
-          )
+          response.common("HR updated successfully", true, updateDetails, 200)
         );
       } else {
         res
           .status(422)
-          .send(response.common("Employee Not updated", false, undefined, 300));
+          .send(response.common("HR Not updated", false, undefined, 300));
       }
     } else {
       res
         .status(422)
-        .send(response.common("Employee Not Found", false, undefined, 600));
+        .send(response.common("HR Not Found", false, undefined, 600));
     }
   } catch (err) {
     res.status(422).send(response.common(err, false, undefined, 500));
   }
 };
 
-// Employee Delete
+//HR Delete
 
-module.exports.employee_delete = async (req, res) => {
-  try {
-    const userID = req.params.userID;
-    const EmployeeID = await Employee.findById(userID);
-    console.log(EmployeeID);
-    if (EmployeeID) {
-      const delet = await Employee.findByIdAndDelete(userID);
-      res.send(
-        response.common("Employee Deleted Successfully", true, delet, 200)
-      );
-    } else {
-      res.status(422).send(response.common("Employee Not Found", false, 300));
-    }
-  } catch (err) {
-    res.status(422).send(response.common(err, false, 400));
-  }
-};
-
-//Employee Get By ID
-
-module.exports.get_employee = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const Employe_get = await Employee.find({ company_id: id });
-    if (Employe_get.length > 0) {
-      res.send(response.common("Get All Employee", true, Employe_get, 200));
-    } else {
-      res.status(422).send(response.common("Employee Not Found", false, 300));
-    }
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
-
-//all holiday BY CompanyID
-
-module.exports.get_holiday = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const Holiday_get = await holiday.find({ company_id: id });
-    if (Holiday_get.length > 0) {
-      res.send(response.common("Get All Holiday", true, Holiday_get, 200));
-    } else {
-      res.status(422).send(response.common("Company Not Found", false, 300));
-    }
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
-};
-
-//Holiday Update
-module.exports.holiday_update = async (req, res) => {
-  try {
-    const id = req.params.id;
-    await holiday.findById(id).then(async (update) => {
-      await holiday.findByIdAndUpdate(
-        id,
-        {
-          date: req.body.date,
-          day: req.body.day,
-          holiday_name: req.body.holiday_name,
-        },
-        { new: true }
-      );
-      if (update) {
-        res.send(
-          response.common("Holiday updated successfully", true, update, 200)
-        );
-      } else {
-        res
-          .status(422)
-          .send(response.common("Not Updated Holiday", false, 300));
-      }
-    });
-  } catch (err) {
-    res.status(422).json({ message: err.message });
-  }
-};
-
-//Holiday Delete
-module.exports.holiday_delete = async (req, res) => {
-  try {
-    const id = req.params.id;
-    holiday.findById(id).then(async (deleteHoliday) => {
-      if (deleteHoliday) {
-        const delet = await holiday.findByIdAndDelete(id);
-        res.send(response.common("deleted success", true, delet, 200));
-      } else {
-        res.send(response.common("ID not found", false, 300));
-      }
-    });
-  } catch (err) {
-    res.send(response.common(err, false, 400));
-  }
-};
+// module.exports.hr_delete = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const hrID = await Employee.findById(id);
+//     console.log(hrID);
+//     if (hrID) {
+//       const delet = await Employee.findByIdAndDelete(id);
+//       res.send(
+//         response.common("Employee Deleted Successfully", true, delet, 200)
+//       );
+//     } else {
+//       res.status(422).send(response.common("Employee Not Found", false, 300));
+//     }
+//   } catch (err) {
+//     res.status(422).send(response.common(err, false, 400));
+//   }
+// };

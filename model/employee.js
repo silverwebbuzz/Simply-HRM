@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
+// var AutoIncrement = require("mongoose-sequence")(mongoose);
 const Employeeschema = new mongoose.Schema({
   first_Name: {
     type: "string",
@@ -49,7 +50,6 @@ const Employeeschema = new mongoose.Schema({
   ID_number: {
     type: "string",
   },
-
   bank_name: {
     type: "string",
   },
@@ -74,11 +74,21 @@ const Employeeschema = new mongoose.Schema({
   company_id: {
     type: "string",
   },
+  employee_id: {
+    type: Number,
+  },
+  hr_id: {
+    type: Number,
+  },
   created_at: {
     type: Date,
     default: Date.now,
   },
 });
+// Employeeschema.plugin(AutoIncrement, {
+//   id: "employee_seq",
+//   inc_field: "employee_id",
+// });
 Employeeschema.pre("save", async function (next) {
   try {
     if (!this.isModified("password")) {
@@ -86,7 +96,6 @@ Employeeschema.pre("save", async function (next) {
     }
     const hased = await bcryptjs.hash(this.password, 10);
     this.password = hased;
-
     return next();
   } catch (err) {
     return next(err);
