@@ -2,19 +2,20 @@ const router = require("express").Router();
 const authentiction = require("../controller/auth/authentiction");
 const companyManagement = require("../controller/companyManagement/company");
 const employeeManagement = require("../controller/employeeManagement/employee");
+const hrManagement = require("../controller/hrManagement/hr");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 //  user
 
-router.post("/registation", upload.none(), authentiction.registation);
+router.post("/registration", upload.none(), authentiction.registration);
 router.post("/login", upload.none(), authentiction.login);
 
 // company
 
 router.post(
-  "/company_registation",
+  "/company_registration",
   upload.none(),
-  companyManagement.company_registation
+  companyManagement.company_registration
 );
 router.post("/company_login", upload.none(), companyManagement.company_login);
 router.post(
@@ -29,9 +30,9 @@ router.post("/add_holiday", upload.none(), companyManagement.add_holiday);
 //Employee
 
 router.post(
-  "/employee_registation",
+  "/employee_registration",
   upload.none(),
-  employeeManagement.employee_registation
+  employeeManagement.employee_registration
 );
 router.post(
   "/employee_login",
@@ -60,4 +61,15 @@ router.delete(
   upload.none(),
   employeeManagement.holiday_delete
 );
+
+//HR Management
+
+router.post("/hr_registration", upload.none(), hrManagement.hr_registration);
+router.post("/hr_login", upload.none(), hrManagement.hr_login);
+router.post(
+  "/update_hr_details/:id",
+  upload.none(),
+  hrManagement.update_hr_details
+);
+// router.delete("/hr_delete/:id", upload.none(), hrManagement.hr_delete);
 module.exports = router;

@@ -5,15 +5,15 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { userType } = require("../../helper/enum/userType");
 
-//user registation
-module.exports.registation = async (req, res) => {
+//user registration
+module.exports.registration = async (req, res) => {
   try {
     const data = await Users.findOne({ email_id: req.body.email_id });
     console.log();
     if (data) {
       res
         .status(422)
-        .send(response.common("User alrady exist", false, undefined, 300));
+        .send(response.common("User already exist", false, undefined, 300));
     } else {
       const user = new Users({
         first_name: req.body.first_name,
@@ -26,12 +26,12 @@ module.exports.registation = async (req, res) => {
       user.save().then(async (userData) => {
         if (userData) {
           res.send(
-            response.common("Registation Successfully ", true, userData, 200)
+            response.common("Registration Successfully ", true, userData, 200)
           );
         } else {
           res
             .status(422)
-            .send(response.common("Registation Failed", true, undefined, 400));
+            .send(response.common("Registration Failed", true, undefined, 400));
         }
       });
     }

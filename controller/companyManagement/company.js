@@ -6,8 +6,8 @@ const jwt = require("jsonwebtoken");
 const { userType } = require("../../helper/enum/userType");
 const { login } = require("../auth/authentiction");
 const Holiday = require("../../model/holiday");
-//Company Registation
-module.exports.company_registation = async (req, res) => {
+//Company registration
+module.exports.company_registration = async (req, res) => {
   try {
     const email_id = req.body.email_id;
     const company_name = req.body.company_name;
@@ -20,7 +20,7 @@ module.exports.company_registation = async (req, res) => {
     if (Email || Company_Name) {
       res
         .status(422)
-        .send(response.common("User alrady exist", false, undefined, 300));
+        .send(response.common("User already exists", false, undefined, 300));
     } else {
       const user = new Company({
         company_name: req.body.company_name,
@@ -30,12 +30,17 @@ module.exports.company_registation = async (req, res) => {
       user.save().then(async (companyData) => {
         if (companyData) {
           res.send(
-            response.common("Registation Successfully ", true, companyData, 200)
+            response.common(
+              "Registration Successfully ",
+              true,
+              companyData,
+              200
+            )
           );
         } else {
           res
             .status(422)
-            .send(response.common("Registation Failed", true, undefined, 400));
+            .send(response.common("Registration Failed", true, undefined, 400));
         }
       });
     }
@@ -61,19 +66,12 @@ module.exports.company_login = async (req, res) => {
           .send(response.common("Login Failed..", false, undefined, 300));
       } else {
         const data = { user, token };
-        res.send(response.common("Login Sucessfully", true, data, 200));
+        res.send(response.common("Login Successfully", true, data, 200));
       }
     } else {
       res
         .status(422)
-        .send(
-          response.common(
-            "Email And Password Not Currect",
-            false,
-            undefined,
-            400
-          )
-        );
+        .send(response.common("Email Not Valid", false, undefined, 400));
     }
   } catch (err) {
     res.status(422).send(response.common(err, false, undefined, 500));
@@ -87,11 +85,11 @@ module.exports.update_company_details = async (req, res) => {
     const company_name = req.body.company_name;
     const Company_Id = await Company.findById(id);
     if (!Company_Id) {
-      res.status(422).send(response.common("User Not Found"));
+      res.status(422).send(response.common("Company Not Found"));
     } else {
       const update = await Company.find({ company_name });
       if (update.length > 0) {
-        res.status(422).send(response.common("Company Name Alredy Exist"));
+        res.status(422).send(response.common("Company Name Already Exist "));
       } else {
         const updateDetails = await Company.findByIdAndUpdate(
           id,
@@ -118,7 +116,7 @@ module.exports.update_company_details = async (req, res) => {
         if (updateDetails) {
           res.send(
             response.common(
-              "user updated successfully",
+              "Company Updated Successfully",
               true,
               updateDetails,
               200
@@ -127,7 +125,9 @@ module.exports.update_company_details = async (req, res) => {
         } else {
           res
             .status(422)
-            .send(response.common("user Not updated", false, undefined, 300));
+            .send(
+              response.common("Company Not Updated", false, undefined, 300)
+            );
         }
       }
     }
@@ -171,22 +171,21 @@ module.exports.companyById = async (req, res) => {
 
 module.exports.add_holiday = async (req, res) => {
   try {
-    const holiday = new Holiday(
-      {
-        holiday_name: req.body.holiday_name,
-        date: req.body.date,
-        day: req.body.day,
-        company_id: req.body.company_id,
-      },
-      { new: true }
-    );
+    const holiday = new Holiday({
+      holiday_name: req.body.holiday_name,
+      date: req.body.date,
+      day: req.body.day,
+      company_id: req.body.company_id,
+    });
     const newholiday = holiday.save();
     if (newholiday) {
-      res.send(response.common("Holiday Add Success ", true, holiday, 200));
+      res.send(
+        response.common("Holiday Add Successfully ", true, holiday, 200)
+      );
     } else {
       res
         .status(422)
-        .send(response.common("Not Add Holiday", false, undefined, 400));
+        .send(response.common("Holiday Not Add", false, undefined, 400));
     }
   } catch (err) {
     res.status(422).send(response.common(err, false, undefined, 600));
