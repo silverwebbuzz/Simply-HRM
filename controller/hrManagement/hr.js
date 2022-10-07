@@ -26,9 +26,9 @@ module.exports.hr_registration = async (req, res) => {
         date_of_birth: req.body.date_of_birth,
         email_id: req.body.email_id,
         password: req.body.password,
+        mobile_number: req.body.mobile_number,
         alternate_number: req.body.alternate_number,
         father_number: req.body.father_number,
-        mother_number: req.body.mother_number,
         current_address: req.body.current_address,
         permanent_address: req.body.permanent_address,
         designation: req.body.designation,
@@ -144,20 +144,34 @@ module.exports.update_hr_details = async (req, res) => {
 
 //HR Delete
 
-// module.exports.hr_delete = async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const hrID = await Employee.findById(id);
-//     console.log(hrID);
-//     if (hrID) {
-//       const delet = await Employee.findByIdAndDelete(id);
-//       res.send(
-//         response.common("Employee Deleted Successfully", true, delet, 200)
-//       );
-//     } else {
-//       res.status(422).send(response.common("Employee Not Found", false, 300));
-//     }
-//   } catch (err) {
-//     res.status(422).send(response.common(err, false, 400));
-//   }
-// };
+module.exports.hr_delete = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const hrID = await Hr.findById(id);
+
+    if (hrID) {
+      const delet = await Hr.findByIdAndDelete(id);
+      res.send(response.common("HR Deleted Successfully", true, delet, 200));
+    } else {
+      res.status(422).send(response.common("HR Not Found", false, 300));
+    }
+  } catch (err) {
+    res.status(422).send(response.common(err, false, 400));
+  }
+};
+
+//GET Company-ID BY HR
+
+module.exports.get_hr = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const HR_get = await Hr.find({ company_id: id });
+    if (HR_get.length > 0) {
+      res.send(response.common("Get Company By HR", true, HR_get, 200));
+    } else {
+      res.status(422).send(response.common("HR Not Found", false, 300));
+    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};

@@ -65,11 +65,12 @@ router.delete(
 //HR Management
 
 router.post("/hr_registration", upload.none(), hrManagement.hr_registration);
+router.get("/get_hr/:id", upload.none(), hrManagement.get_hr);
 router.post("/hr_login", upload.none(), hrManagement.hr_login);
 router.post(
   "/update_hr_details/:id",
   upload.none(),
   hrManagement.update_hr_details
 );
-// router.delete("/hr_delete/:id", upload.none(), hrManagement.hr_delete);
+router.delete("/hr_delete/:id", upload.none(), hrManagement.hr_delete);
 module.exports = router;

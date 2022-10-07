@@ -99,6 +99,7 @@ module.exports.update_company_details = async (req, res) => {
             //   Company_logo: req.body.Company_logo,
             industry_business_location: req.body.industry_business_location,
             company_address: req.body.company_address,
+            country: req.body.country,
             city: req.body.city,
             zip_code: req.body.zip_code,
             mobile_number: req.body.mobile_number,
