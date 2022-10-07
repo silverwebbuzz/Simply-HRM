@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const bcryptjs = require("bcryptjs");
 var AutoIncrement = require("mongoose-sequence")(mongoose);
-const Employeeschema = new mongoose.Schema({
+const HRschema = new mongoose.Schema({
   first_Name: {
     type: "string",
   },
@@ -27,9 +27,6 @@ const Employeeschema = new mongoose.Schema({
     type: "string",
   },
   father_number: {
-    type: "string",
-  },
-  mother_number: {
     type: "string",
   },
   current_address: {
@@ -65,7 +62,7 @@ const Employeeschema = new mongoose.Schema({
   upload_Document: {
     type: "string",
   },
-  employee_image: {
+  hr_image: {
     type: "string",
   },
   user_type: {
@@ -77,7 +74,7 @@ const Employeeschema = new mongoose.Schema({
   company_name: {
     type: "string",
   },
-  employee_id: {
+  hr_id: {
     type: Number,
   },
   created_at: {
@@ -85,12 +82,12 @@ const Employeeschema = new mongoose.Schema({
     default: Date.now,
   },
 });
-Employeeschema.plugin(AutoIncrement, {
-  id: "employee_seq",
-  inc_field: "employee_id",
+HRschema.plugin(AutoIncrement, {
+  id: "hr_seq",
+  inc_field: "hr_id",
   reference_fields: ["company_id"],
 });
-Employeeschema.pre("save", async function (next) {
+HRschema.pre("save", async function (next) {
   try {
     if (!this.isModified("password")) {
       return next();
@@ -102,4 +99,4 @@ Employeeschema.pre("save", async function (next) {
     return next(err);
   }
 });
-module.exports = mongoose.model("employee", Employeeschema);
+module.exports = mongoose.model("Hr", HRschema);

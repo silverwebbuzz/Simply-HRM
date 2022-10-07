@@ -1,4 +1,4 @@
-const Employee = require("../../model/employee");
+const Hr = require("../../model/hr");
 const express = require("express");
 const response = require("../../helper/middlewere");
 const bcrypt = require("bcryptjs");
@@ -10,7 +10,7 @@ const employee = require("../../model/employee");
 //HR Registration
 module.exports.hr_registration = async (req, res) => {
   try {
-    const Employe_data = await Employee.findOne({
+    const Employe_data = await Hr.findOne({
       email_id: req.body.email_id,
     });
 
@@ -19,14 +19,13 @@ module.exports.hr_registration = async (req, res) => {
         .status(422)
         .send(response.common("HR already exist", false, undefined, 300));
     } else {
-      const user = new Employee({
+      const user = new Hr({
         first_Name: req.body.first_Name,
         last_name: req.body.last_name,
         middle_Name: req.body.middle_Name,
         date_of_birth: req.body.date_of_birth,
         email_id: req.body.email_id,
         password: req.body.password,
-        mobile_number: req.body.mobile_number,
         alternate_number: req.body.alternate_number,
         father_number: req.body.father_number,
         mother_number: req.body.mother_number,
@@ -65,7 +64,7 @@ module.exports.hr_registration = async (req, res) => {
 module.exports.hr_login = async (req, res) => {
   try {
     const email_id = req.body.email_id;
-    const user = await Employee.findOne({ email_id: email_id });
+    const user = await Hr.findOne({ email_id: email_id });
     if (user) {
       const validPassword = await bcrypt.compare(
         req.body.password,
@@ -94,10 +93,10 @@ module.exports.hr_login = async (req, res) => {
 module.exports.update_hr_details = async (req, res) => {
   try {
     const id = req.params.id;
-    const email = await Employee.findById(id);
+    const email = await Hr.findById(id);
     console.log(email);
     if (email) {
-      const updateDetails = await Employee.findByIdAndUpdate(
+      const updateDetails = await Hr.findByIdAndUpdate(
         id,
         {
           first_Name: req.body.first_Name,
@@ -107,7 +106,6 @@ module.exports.update_hr_details = async (req, res) => {
           mobile_number: req.body.mobile_number,
           alternate_number: req.body.alternate_number,
           father_number: req.body.father_number,
-          mother_number: req.body.mother_number,
           current_address: req.body.current_address,
           permanent_address: req.body.permanent_address,
           designation: req.body.designation,
