@@ -17,6 +17,9 @@ const CompanySchema = new mongoose.Schema({
   Company_logo: {
     type: "string",
   },
+  country: {
+    type: "string",
+  },
   industry_business_location: {
     type: "string",
   },
