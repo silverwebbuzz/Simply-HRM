@@ -82,54 +82,46 @@ module.exports.company_login = async (req, res) => {
 module.exports.update_company_details = async (req, res) => {
   try {
     const id = req.params.id;
-    const company_name = req.body.company_name;
     const Company_Id = await Company.findById(id);
     if (!Company_Id) {
       res.status(422).send(response.common("Company Not Found"));
     } else {
-      const update = await Company.find({ company_name });
-      if (update.length > 0) {
-        res.status(422).send(response.common("Company Name Already Exist "));
-      } else {
-        const updateDetails = await Company.findByIdAndUpdate(
-          id,
-          {
-            company_name: req.body.company_name,
-            company_website_url: req.body.company_website_url,
-            //   Company_logo: req.body.Company_logo,
-            industry_business_location: req.body.industry_business_location,
-            company_address: req.body.company_address,
-            country: req.body.country,
-            city: req.body.city,
-            zip_code: req.body.zip_code,
-            mobile_number: req.body.mobile_number,
-            phone_number: req.body.phone_number,
-            contact_person: req.body.contact_person,
-            time_zone: req.body.time_zone,
-            date_format: req.body.date_format,
-            company_number: req.body.company_number,
-            company_tax_id: req.body.company_tax_id,
-          },
-          {
-            new: true,
-          }
-        );
-        if (updateDetails) {
-          res.send(
-            response.common(
-              "Company Updated Successfully",
-              true,
-              updateDetails,
-              200
-            )
-          );
-        } else {
-          res
-            .status(422)
-            .send(
-              response.common("Company Not Updated", false, undefined, 300)
-            );
+      const updateDetails = await Company.findByIdAndUpdate(
+        id,
+        {
+          company_name: req.body.company_name,
+          company_website_url: req.body.company_website_url,
+          //   Company_logo: req.body.Company_logo,
+          industry_business_location: req.body.industry_business_location,
+          company_address: req.body.company_address,
+          country: req.body.country,
+          city: req.body.city,
+          zip_code: req.body.zip_code,
+          mobile_number: req.body.mobile_number,
+          phone_number: req.body.phone_number,
+          contact_person: req.body.contact_person,
+          time_zone: req.body.time_zone,
+          date_format: req.body.date_format,
+          company_number: req.body.company_number,
+          company_tax_id: req.body.company_tax_id,
+        },
+        {
+          new: true,
         }
+      );
+      if (updateDetails) {
+        res.send(
+          response.common(
+            "Company Updated Successfully",
+            true,
+            updateDetails,
+            200
+          )
+        );
+      } else {
+        res
+          .status(422)
+          .send(response.common("Company Not Updated", false, undefined, 300));
       }
     }
   } catch (err) {
